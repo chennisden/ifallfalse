@@ -56,8 +56,9 @@
 %   \end{ifallfalse}
 % \end{verbatim}
 % \textsf{string} will be compared to the set of strings, and if \textsf{string} does not match the set of strings, \textsf{action} will be executed.
-%   \begin{macrocode}
-\newenvironment{allfalse}[2]{
+%    \begin{macrocode}
+\newenvironment{allfalse}[2]
+{
     \def\comparedstring{#1}
     % Locally defines the string to be compared
     % with what will be passed in via \orcheck
@@ -71,7 +72,7 @@
 {
     \logicbody
 }
-%   \end{macrocode}
+%    \end{macrocode}
 % \subsection{Error Checking}
 %
 % The package checks whether the macro |\orcheck| is used inside an \textsf{ifallfalse} environment. If it is not, the package throws an error.
