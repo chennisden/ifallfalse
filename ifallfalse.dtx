@@ -120,7 +120,7 @@
 % \ldots action
 % \fi\ldots \fi
 % \end{verbatim}
-% Logically, \textsf{action} will only execute if all the conditions are false; in other words, it will only execute if |\pdfstrcmp{#1}| does not match any of the strings passed in via |\orcheck|. This is because each |\else| branch must execute. 
+% Logically, \textsf{action} will only execute if all the conditions are false; in other words, it will only execute if |\comparedstring| does not match any of the strings passed in via |\orcheck|. This is because each |\else| branch must execute. 
 % \end{itemize}
 %    \begin{macrocode}
 \newcommand*\@allfalsename{allfalse}
