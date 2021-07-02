@@ -16,5 +16,21 @@
 ## Package contents
 
 - `README.md`
-- ifallfalse.dtx
-- ifallfalse.ins
+- `ifallfalse.dtx`
+- `ifallfalse.ins`
+
+## File generation
+
+A working TeX installation is required.
+
+Run
+
+    tex ifallfalse.ins
+
+to generate `ifallfalse.sty`. To use it, you need to put `ifallfalse.sty` into a directory searched by TeX.
+
+Run
+
+    pdflatex ifallfalse.dtx
+
+to generate `ifallfalse.pdf`, which contains the package documentation.

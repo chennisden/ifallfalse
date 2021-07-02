@@ -46,38 +46,94 @@
 %
 % \section{Usage}
 %
-% The package provides an \textsf{ifallfalse} environment and a macro |\orcheck| to be used inside 
+% The package provides an \textsf{ifallfalse} environment and a macro |\orcheck| to be used inside the \textsf{ifallfalse} environment.
 %
 % \DescribeEnv{ifallfalse}
 % To set up an ifallfalse environment, simply write
 % \begin{verbatim}
-%   \begin{ifallfalse}{string}{action}
+%\begin{ifallfalse}{string}{action}
 %
-%   \end{ifallfalse}
+%\end{ifallfalse}
 % \end{verbatim}
-% \textsf{string} will be compared to the set of strings, and if \textsf{string} does not match the set of strings, \textsf{action} will be executed.
-%    \begin{macrocode}
-\newenvironment{allfalse}[2]
-{
-    \def\comparedstring{#1}
-    % Locally defines the string to be compared
-    % with what will be passed in via \orcheck
-    \def\logicbody{#2}
-    % Initializes the body of logic that we will
-    % surround with \if \else \fi constructs
-    % in order to execute the action when desired
-    % i.e. when comparedstring matches none of the
-    % strings passes into orcheck.
-}
-{
-    \logicbody
-}
-%    \end{macrocode}
+% \textsf{string} will be compared to the set of strings (which we will declare via |\orcheck|), and if \textsf{string} does not match the set of strings, \textsf{action} will be executed.
+%
+% \DescribeMacro{\orcheck}
+%
+% To add strings to the set that \textsf{string} will be compared to, we must write |\orcheck{setstring}| inside the corresponding \textsf{ifallfalse} environment. Then, \textsf{action} will not execute if \textsf{string} matches \textsf{setstring} or any arguments of previous |\orcheck| declarations.
+%
+% If no |\orcheck| declarations exist, then \textsf{action} will always be executed.
+%
 % \subsection{Error Checking}
 %
 % The package checks whether the macro |\orcheck| is used inside an \textsf{ifallfalse} environment. If it is not, the package throws an error.
 %
 % \section{Example}
+%
+% Here is a simple example to demonstrate how \textsf{ifallfalse} is used.
+% \begin{verbatim}
+%\documentclass{minimal}
+%
+%\begin{document}
+%
+%\begin{ifallfalse}{purple}{This color is not red, blue, or green!}
+%    \orcheck{red}
+%    \orcheck{blue}
+%    \orcheck{green}
+%\end{ifallfalse}
+%
+%\end{document}
+% \end{verbatim}
+%
+% In this case, because \textsf{purple} does not match \textsf{red}, \textsf{blue}, or \textsf{green}, the action --- which is printing \textsf{This color is not red, blue, or green!} --- will execute at that location inside the document.
+%
+% \section{Implementation}
+% 
+% These are the implementation details of package \textsf{ifallfalse}. Because the package is so short, we can explain everything.
+% 
+% \begin{environment}{ifallfalse}
+% When setting up ifallfalse, we locally define the |\comparedstring| macro with the first argument that the environment takes in. This is what will be compared against all the strings passed in through the |\orcheck| declarations inside the environment.
+%
+% Then, we define our body of logic (which we will be adding onto through |\orcheck|) to just initially consist of the action we would like to perform if |\comparedstring| matches none of the strings passed in through |\orcheck|.
+%    \begin{macrocode}
+\newenvironment{allfalse}[2]
+{
+    \def\comparedstring{#1}
+    \def\logicbody{#2}
+}
+{
+    \logicbody
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{\orcheck}
+% We first save \textsf{allfalse} to a macro so we can use |\ifx| to compare the current environment name against it. If we can, then we add some following (somewhat convoluted) code to |\logicbody|. I will explain what each piece of it does, though not in the order the pieces of code appear.
+% \begin{itemize}
+% \item |\ifx\@currenvir\@allfalsename| evaluates to true if the current environment (whose name is saved to the macro |\@currenvir|) matches the name of |\@allfalsename|, or \textsf{allfalse}.
+% \item If it evaluates to \textsf{false}, the package throws an error.
+% \item The line |\pdfstrcmp{\comparedstring}{#1}=0| evaluates to true when put with |\ifnum| if the two arguments passed into |\pdfstrcmp| are equal, because |pdfstrcmp| compares their lexographical order and returns 0 if the two strings are lexographically equivalent.
+% \item Thus, we can treat |\ifnum\pdfstrcmp{\comparedstring}{#1}=0| as an expression that evaluates to true if |\comparedstring| and |#1| match, and false otherwise.
+% \item When all is said and done, the logic reduces to something of the form
+% \begin{verbatim}
+% \if\else
+% \if\else
+% \ldots action
+% \fi\ldots \fi
+% \end{verbatim}
+% Logically, \textsf{action} will only execute if all the conditions are false; in other words, it will only execute if |\pdfstrcmp{#1}| does not match any of the strings passed in via |\orcheck|. This is because each |\else| branch must execute. 
+% \end{itemize}
+%    \begin{macrocode}
+\newcommand*\@allfalsename{allfalse}
+
+\newcommand{\orcheck}[1]{
+    \ifx\@currenvir\@allfalsename
+        \protected@edef\logicbody{\ifnum\pdfstrcmp{\comparedstring}{#1}=0\else\logicbody\fi}
+    \else
+        \PackageError{ifallfalse}{\protect\orcheck\space should be nested within the allfalse environment}{}
+    \fi
+}
+%    \end{macrocode}
+% \end{macro}
 %
 % \Finale
 \endinput
