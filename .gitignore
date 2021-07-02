@@ -1,0 +1,8 @@
+# Ignore output
+*.sty
+*.log
+*.tex
+*.dvi
+*.glo
+*.idx
+*.aux
