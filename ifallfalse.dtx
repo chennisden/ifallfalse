@@ -127,9 +127,13 @@
 
 \newcommand{\orcheck}[1]{
     \ifx\@currenvir\@allfalsename
-        \protected@edef\logicbody{\ifnum\pdfstrcmp{\comparedstring}{#1}=0\else\logicbody\fi}
+        \protected@edef\logicbody{
+            \ifnum\pdfstrcmp{\comparedstring}{#1}=0\else\logicbody\fi
+        }
     \else
-        \PackageError{ifallfalse}{\protect\orcheck\space should be nested within the allfalse environment}{}
+        \PackageError{ifallfalse}{
+            \protect\orcheck\space should be nested within the allfalse environment
+        }{}
     \fi
 }
 %    \end{macrocode}
