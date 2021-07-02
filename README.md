@@ -15,9 +15,10 @@
 
 ## Package contents
 
-- `README.md`
-- `ifallfalse.dtx`
-- `ifallfalse.ins`
+- `README.md` this file
+- `ifallfalse.pdf` documentation PDF with implementation details 
+- `ifallfalse.dtx` contains package and documentation code
+- `ifallfalse.ins` generates .sty from .dtx
 
 ## File generation
 
