@@ -46,40 +46,40 @@
 %
 % \section{Usage}
 %
-% The package provides an \textsf{ifallfalse} environment and a macro |\orcheck| to be used inside the \textsf{ifallfalse} environment.
+% The package provides an \textsf{allfalse} environment and a macro |\orcheck| to be used inside the \textsf{allfalse} environment.
 %
-% \DescribeEnv{ifallfalse}
-% To set up an ifallfalse environment, simply write
+% \DescribeEnv{allfalse}
+% To set up an allfalse environment, simply write
 % \begin{verbatim}
-%\begin{ifallfalse}{string}{action}
+%\begin{allfalse}{string}{action}
 %
-%\end{ifallfalse}
+%\end{allfalse}
 % \end{verbatim}
 % \textsf{string} will be compared to the set of strings (which we will declare via |\orcheck|), and if \textsf{string} does not match the set of strings, \textsf{action} will be executed.
 %
 % \DescribeMacro{\orcheck}
 %
-% To add strings to the set that \textsf{string} will be compared to, we must write |\orcheck{setstring}| inside the corresponding \textsf{ifallfalse} environment. Then, \textsf{action} will not execute if \textsf{string} matches \textsf{setstring} or any arguments of previous |\orcheck| declarations.
+% To add strings to the set that \textsf{string} will be compared to, we must write |\orcheck{setstring}| inside the corresponding \textsf{allfalse} environment. Then, \textsf{action} will not execute if \textsf{string} matches \textsf{setstring} or any arguments of previous |\orcheck| declarations.
 %
 % If no |\orcheck| declarations exist, then \textsf{action} will always be executed.
 %
 % \subsection{Error Checking}
 %
-% The package checks whether the macro |\orcheck| is used inside an \textsf{ifallfalse} environment. If it is not, the package throws an error.
+% The package checks whether the macro |\orcheck| is used inside an \textsf{allfalse} environment. If it is not, the package throws an error.
 %
 % \section{Example}
 %
-% Here is a simple example to demonstrate how \textsf{ifallfalse} is used.
+% Here is a simple example to demonstrate how \textsf{allfalse} is used.
 % \begin{verbatim}
 %\documentclass{minimal}
 %
 %\begin{document}
 %
-%\begin{ifallfalse}{purple}{This color is not red, blue, or green!}
+%\begin{allfalse}{purple}{This color is not red, blue, or green!}
 %    \orcheck{red}
 %    \orcheck{blue}
 %    \orcheck{green}
-%\end{ifallfalse}
+%\end{allfalse}
 %
 %\end{document}
 % \end{verbatim}
@@ -88,10 +88,10 @@
 %
 % \section{Implementation}
 % 
-% These are the implementation details of package \textsf{ifallfalse}. Because the package is so short, we can explain everything.
+% These are the implementation details of package \textsf{allfalse}. Because the package is so short, we can explain everything.
 % 
-% \begin{environment}{ifallfalse}
-% When setting up ifallfalse, we locally define the |\comparedstring| macro with the first argument that the environment takes in. This is what will be compared against all the strings passed in through the |\orcheck| declarations inside the environment.
+% \begin{environment}{allfalse}
+% When setting up allfalse, we locally define the |\comparedstring| macro with the first argument that the environment takes in. This is what will be compared against all the strings passed in through the |\orcheck| declarations inside the environment.
 %
 % Then, we define our body of logic (which we will be adding onto through |\orcheck|) to just initially consist of the action we would like to perform if |\comparedstring| matches none of the strings passed in through |\orcheck|.
 %    \begin{macrocode}
