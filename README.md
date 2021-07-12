@@ -1,4 +1,4 @@
-# The LaTeX package ifallfalse - version 1.0.0 (2021/07/10)
+# The LaTeX package ifallfalse - version 1.0.1 (2021/07/10)
 
 > Copyright (C) 2021 Dennis Chen <proofprogram@gmail.com>
 >
