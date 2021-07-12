@@ -15,7 +15,7 @@
 % \iffalse
 %<package>
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\ProvidesPackage{ifallfalse}[2021/07/10 v1.0.0 Compare string against set of other strings]
+%<package>\ProvidesPackage{ifallfalse}[2021/07/12 v1.0.1 Compare string against set of other strings]
 
 %<*driver>
 \documentclass{ltxdoc}
@@ -30,7 +30,7 @@
 %</driver>
 % \fi
 %
-% \changes{v.1.0.1}{2021/07/10}{Fix errant references to allfalse environment}
+% \changes{v.1.0.1}{2021/07/12}{Fix errant references to allfalse environment and add limitations}
 % \changes{v1.0.0}{2021/07/01}{Initial version}
 %
 % \GetFileInfo{ifallfalse.sty}
@@ -139,6 +139,10 @@
 }
 %    \end{macrocode}
 % \end{macro}
+%
+% \section{Limitations}
+%
+% This package cannot be used in the \textsf{lualatex} engine.
 %
 % \Finale
 \endinput

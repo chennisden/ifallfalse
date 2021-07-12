@@ -1,4 +1,4 @@
-# The LaTeX package ifallfalse - version 1.0.1 (2021/07/10)
+# The LaTeX package ifallfalse - version 1.0.1 (2021/07/12)
 
 > Copyright (C) 2021 Dennis Chen <proofprogram@gmail.com>
 >
@@ -11,12 +11,14 @@
 > and version 1.3 or later is part of all distributions of LaTeX
 > version 2005/12/01 or later.
 
-`ifallfalse` provides an environment that can compare a string against a set of another strings, and if it matches none of them, it executes some action.
+`ifallfalse` provides an `allfalse` environment that can compare a string against a set of another strings, and if it matches none of them, it executes some action.
+
+Note that this package does not work with the `lualatex` engine.
 
 ## Package contents
 
 - `README.md` this file
-- `ifallfalse.pdf` documentation PDF with implementation details 
+- `ifallfalse.pdf` documentation PDF with implementation details
 - `ifallfalse.dtx` contains package and documentation code
 - `ifallfalse.ins` generates .sty from .dtx
 
