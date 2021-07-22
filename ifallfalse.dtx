@@ -15,7 +15,7 @@
 % \iffalse
 %<package>
 %<package>\NeedsTeXFormat{LaTeX2e}
-%<package>\ProvidesPackage{ifallfalse}[2021/07/12 v1.0.1 Compare string against set of other strings]
+%<package>\ProvidesPackage{ifallfalse}[2021/07/22 v2.0.0 Compare string against set of other strings]
 
 %<*driver>
 \documentclass{ltxdoc}
@@ -30,6 +30,7 @@
 %</driver>
 % \fi
 %
+% \changes{v2.0.0}{2021/07/22}{Add comments after lines in allfalse to prevent extra spacing from popping up}
 % \changes{v1.0.1}{2021/07/12}{Fix errant references to allfalse environment and add limitations}
 % \changes{v1.0.0}{2021/07/01}{Initial version}
 %
@@ -37,6 +38,7 @@
 %
 % \title{\textsf{ifallfalse} -- Compare string against set of strings}
 % \author{Dennis Chen \\ proofprogram@gmail.com}
+% \changes{v2.0.0}{2021/07/22}{Remove errant `v' in date}
 % \date{\fileversion, \filedate\thanks{\url{https://github.com/chennisden/ifallfalse}}}
 %
 % \maketitle
@@ -52,11 +54,11 @@
 % \DescribeEnv{allfalse}
 % To set up an allfalse environment, simply write
 % \begin{verbatim}
-%\begin{allfalse}{string}{action}
+%\begin{allfalse}{string}{true branch}{false branch}
 %
 %\end{allfalse}
 % \end{verbatim}
-% \textsf{string} will be compared to the set of strings (which we will declare via |\orcheck|), and if \textsf{string} does not match the set of strings, \textsf{action} will be executed.
+% \textsf{string} will be compared to the set of strings (which we will declare via |\orcheck|), and if \textsf{string} does not match the set of strings, \textsf{false branch} will be executed. Otherwise, \textsf{true branch} will be executed.
 %
 % \DescribeMacro{\orcheck}
 %
@@ -76,7 +78,7 @@
 %
 %\begin{document}
 %
-%\begin{allfalse}{purple}{This color is not red, blue, or green!}
+%\begin{allfalse}{purple}{}{This color is not red, blue, or green!}
 %    \orcheck{red}
 %    \orcheck{blue}
 %    \orcheck{green}
@@ -85,24 +87,35 @@
 %\end{document}
 % \end{verbatim}
 %
-% In this case, because \textsf{purple} does not match \textsf{red}, \textsf{blue}, or \textsf{green}, the action --- which is printing \textsf{This color is not red, blue, or green!} --- will execute at that location inside the document.
+% In this case, because \textsf{purple} does not match \textsf{red}, \textsf{blue}, or \textsf{green}, the false branch --- which is \textsf{This color is not red, blue, or green!} --- will execute at that location inside the document.
 %
 % \section{Implementation}
 % 
 % These are the implementation details of package \textsf{allfalse}. Because the package is so short, we can explain everything.
 % 
+% \changes{v2.0.0}{2021/07/22}{Create true and false branch}
 % \begin{environment}{allfalse}
 % When setting up allfalse, we locally define the |\comparedstring| macro with the first argument that the environment takes in. This is what will be compared against all the strings passed in through the |\orcheck| declarations inside the environment.
 %
 % Then, we define our body of logic (which we will be adding onto through |\orcheck|) to just initially consist of the action we would like to perform if |\comparedstring| matches none of the strings passed in through |\orcheck|.
+%
+% Finally, we execute our logicbody, which will change |\ifallfalse@branch| to be false if appropriate. Then, the appropriate action will be executed.
 %    \begin{macrocode}
-\newenvironment{allfalse}[2]
-{
-    \def\comparedstring{#1}
-    \def\logicbody{#2}
+\newenvironment{allfalse}[3]
+{%
+    \newif\ifallfalse@branch\allfalse@branchtrue%
+    \def\comparedstring{#1}%
+    \def\trueaction{#2}%
+    \def\falseaction{#3}%
+    \def\logicbody{\allfalse@branchfalse}%
 }
-{
-    \logicbody
+{%
+    \logicbody%
+    \ifallfalse@branch
+        \trueaction%
+    \else
+        \falseaction%
+    \fi
 }
 %    \end{macrocode}
 % \end{environment}
@@ -118,10 +131,10 @@
 % \begin{verbatim}
 % \if\else
 % \if\else
-% \ldots action
+% \ldots \allfalse@branchfalse
 % \fi\ldots \fi
 % \end{verbatim}
-% Logically, \textsf{action} will only execute if all the conditions are false; in other words, it will only execute if |\comparedstring| does not match any of the strings passed in via |\orcheck|. This is because each |\else| branch must execute. 
+% Logically, |\allfalse@branchfalse| will only execute if all the conditions are false; in other words, it will only execute if |\comparedstring| does not match any of the strings passed in via |\orcheck|. This is because each |\else| branch must execute. 
 % \end{itemize}
 %    \begin{macrocode}
 \newcommand*\@allfalsename{allfalse}
